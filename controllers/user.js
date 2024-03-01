@@ -65,7 +65,7 @@ exports.signUpUser = async (req, res) => {
 		// Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-		const user = new User({name: req.body.name, email: req.body.email, password: hashedPassword});
+		const user = new User({firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: hashedPassword, age : req.body.age, country : req.body.country, gender : req.body.gender});
 
 		try {
 			// Insert user into the database

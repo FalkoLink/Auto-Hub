@@ -50,21 +50,3 @@ exports.signUpPage = async (req, res) => {
 		res.render(createPath('sign_up'), {message:''});
 	}
 };
-exports.updateCarPage = async (req, res) => {
-  verifyToken(req, res);
-	const car = await Car.findOne({_id:req.params.id});
-	if(car!=null){
-		res.render(createPath('update'), {'task': task});
-	}else{
-		res.status(404).json("task is not found!");
-	}
-};
-exports.updateCarPage = async (req, res) => {
-  verifyToken(req, res);
-	const car = await Car.findOne({_id:req.params.id});
-	if(car!=null){
-		res.render(createPath('update'), {'task': task});
-	}else{
-		res.status(404).json("task is not found!");
-	}
-};
