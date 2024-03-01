@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="icon" type="image/x-icon" href="/img/logo.png">
+	<title>Sign Up</title>
+</head>
+<body id="sign">
+	<div id="sign_box">
+		<form method="post">
+			<div>
+				<h2>Sign Up</h2>
+				<p>If you are already registered: <a href="/sign_in">sign in</a></p>
+			</div>
+			<%if(message){%>
+				<div class="alert alert-danger" role="alert">
+					<%= message%>
+				</div>
+				<%}%>
+			<div class="mb-4">
+				<label for="name" class="form-label fw-bold">Name</label>
+				<input type="text" class="form-control" name="name">
+			</div>
+			<div class="mb-4">
+				<label for="email" class="form-label fw-bold">Email address</label>
+				<input type="email" class="form-control" name="email">
+				<div id="emailHelp">We'll never share your email with anyone else.</div>
+			</div>
+			<div class="mb-4">
+				<label for="password" class="form-label fw-bold">Password</label>
+				<input type="password" class="form-control" name="password">
+			</div>
+			<button type="submit" class="btn btn-primary">Sign up</button>
+		</form>
+	</div>
+</body>
+</html>

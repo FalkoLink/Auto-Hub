@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="icon" type="image/x-icon" href="/img/logo.png">
+	<title>AutoHub</title>
+</head>
+<body>
+	<!-- Telegram button -->
+	<div class="rounded-circle position-fixed btn_telegram d-flex justify-content-center">
+		<a id="telegram" href="https://t.me/web_aitu" class="text-decoration-none align-self-center">
+			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" class="bi bi-telegram" viewBox="0 0 16 16">
+				<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
+			</svg>
+		</a>
+	</div>
+
+	<%- include('./partials/header.ejs') %>
+	
+	<main id="service" class="color3 text-white pb-5">
+		<div class="container-xxl">
+			<div class="space"></div>
+			<h1 class="text-center my-5">Service and maintenance</h1>
+			<p class="width1000">It is important to us not only to provide you with an excellent vehicle, but also to ensure its trouble-free operation throughout its entire service life. Our service and maintenance means taking care of your car at every stage of its life.</p>
+			
+			<!-- advantages of our service -->
+			<h2 class="text-center my-5">Advantages of our service</h2>
+			<div class="row mb-5">
+				<div class="col-lg-3 col-6 mb-3">
+					<div class="advant_icon mb-3">
+						<img src="/img/efficiency.png" class="img-fluid">
+					</div>
+					<h3 class="text-center">Fast and efficient</h3>
+					<p class="fst-italic text-center">We value your time and guarantee prompt completion of all types of work</p>
+				</div>
+				<div class="col-lg-3 col-6 mb-3">
+					<div class="advant_icon mb-3">
+						<img src="/img/original.png" class="img-fluid">
+					</div>
+					<h3 class="text-center">Original spare parts</h3>
+					<p class="fst-italic text-center">We use only original parts to ensure the durability and reliability of your car</p>
+				</div>
+				<div class="col-lg-3 col-6 mb-3">
+					<div class="advant_icon mb-3">
+						<img src="/img/maintenance.png" class="img-fluid">
+					</div>
+					<h3 class="text-center">Individual approach</h3>
+					<p class="fst-italic text-center">We take into account the characteristics of each car and provide personalized solutions</p>
+				</div>
+				<div class="col-lg-3 col-6 mb-3">
+					<div class="advant_icon mb-3">
+						<img src="/img/trust.png" class="img-fluid">
+					</div>
+					<h3 class="text-center">Transparency and Honesty</h3>
+					<p class="fst-italic text-center">You will always be aware of all work, an honest assessment of the cost of services</p>
+				</div>
+			</div>
+
+			<!-- professional approach -->
+			<div id="professional" class="row flex-row-reverse">
+				<div class="col-md-6">
+					<h2 class="text-center mb-4">Professional approach</h2>
+					<p>Our team consists of experienced and qualified craftsmen who are ready to provide you with high-quality service. We use only the most modern technologies and original spare parts to ensure that your car always remains in excellent shape.</p>
+				</div>
+				<div class="col-md-6">
+					<div class="overflow-hidden rounded-3">
+						<img src="/img/service.jpeg" class="img-fluid">
+					</div>
+				</div>
+			</div>
+
+			<!-- our services -->
+			<div class="width1000 mt-5">
+				<h2 class="text-center mb-4">Our services</h2>
+				<!-- accordion -->
+				<div class="accordion mb-3 text-dark" id="accordionExample">
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+								Maintenance
+							</button>
+						</h2>
+						<div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								Regular technical checks and replacement of consumables will help prevent malfunctions and extend the life of your vehicle.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								Repair and diagnostics
+							</button>
+						</h2>
+						<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								Our technicians have the expertise to quickly and accurately identify any problems and provide effective solutions.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+								Tire fitting and balancing
+							</button>
+						</h2>
+						<div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								We offer tire installation, balancing and storage services to ensure your vehicle has reliable traction in all conditions.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+								Body repair
+							</button>
+						</h2>
+						<div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								In case of body damage, we will carry out high-quality repairs, restoring the appearance of your car.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+								Seasonal service
+							</button>
+						</h2>
+						<div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+								We offer specialized services to prepare your vehicle for seasonal changes such as oil changes, antifreeze and other fluid changes.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</main>
+	
+	<!-- JavaScript -->
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/jquery-3.7.1.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			// icons
+			$(".advant_icon").animate({
+			bottom:'0',
+			opacity: 1
+			}, 1500)
+			$(".advant_icon").mouseover(function(){
+				$(this).css("transform","scale("+1.3+")")
+			})
+			$(".advant_icon").mouseout(function(){
+				$(this).css("transform","scale("+1+")")
+			})
+			// img
+			$("#professional img").mouseover(function(){
+				$(this).css("transform","scale("+1.1+")")
+			})
+			$("#professional img").mouseout(function(){
+				$(this).css("transform","scale("+1+")")
+			})
+			// telegram
+			$("#telegram").mouseover(function(){
+				$(this).parent().css("transform","scale("+1.3+")")
+			})
+			$("#telegram").mouseout(function(){
+				$(this).parent().css("transform","scale("+1+")")
+			})
+		});
+	</script>
+
+	<%- include('./partials/footer.ejs')%>
+</body>
+</html>
