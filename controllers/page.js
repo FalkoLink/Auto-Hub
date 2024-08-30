@@ -50,3 +50,4 @@ exports.signUpPage = async (req, res) => {
 		res.render(createPath('sign_up'), {message:''});
 	}
 };
+

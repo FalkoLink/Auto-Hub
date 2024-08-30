@@ -22,7 +22,7 @@ const userSchema = new Schema({
 		type: Number,
 		required: true,
 	},
-	country:{
+	phoneNumber:{
 		type: String,
 		required: true,
 	},
@@ -30,6 +30,7 @@ const userSchema = new Schema({
 		type: Boolean,
 		required: true,
 	},
+	favorite:[{ type: mongoose.Schema.Types.ObjectId, ref: 'cars' }],
 }, {timestamps: true});
 
 const User = mongoose.model('User', userSchema);

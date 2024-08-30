@@ -22,6 +22,14 @@ const carSchema = new Schema({
 		type: String,
 		required: false,
 	},
+	ownerName:{
+		type: String,
+		required: true,
+	},
+	phoneNumber:{
+		type: String,
+		required: true,
+	},
 	img1:{
 		type: String,
 		required: false,

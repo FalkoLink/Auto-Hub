@@ -1,7 +1,9 @@
 const User = require('../models/user');
+const Car = require('../models/car');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const verifyToken = require('../middleware/authMiddleware');
 const config = require('../config');
 const nodemailer = require('nodemailer');
 const createPath = (page) => path.resolve(__dirname, '..', 'views', `${page}.ejs`);
@@ -36,6 +38,21 @@ function sendEmail(recipient, subject, message) {
   });
 }
 
+exports.profilePage = async (req, res) => {
+	verifyToken(req, res);
+	if(res.auth){
+		const user = await User.findOne({_id:req.userId});
+		const favs = await Car.find({_id:{$in:user.favorite}});
+		let cars = null;
+		if(res.admin){
+			cars = await Car.find();
+		}
+		res.render(createPath('profile'), {auth: res.auth, admin: res.admin, 'user': user, 'favs': favs, 'cars': cars});
+	}else{
+		res.render(createPath('error'));
+	}
+};
+
 exports.signInUser = async (req, res) => {
   const candidate = await User.findOne({email: req.body.email});
 
@@ -57,6 +74,7 @@ exports.signInUser = async (req, res) => {
 	}
 };
 
+
 exports.signUpUser = async (req, res) => {
   const candidate = await User.findOne({email:req.body.email});
 	if(candidate){
@@ -65,7 +83,7 @@ exports.signUpUser = async (req, res) => {
 		// Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-		const user = new User({firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: hashedPassword, age : req.body.age, country : req.body.country, gender : req.body.gender});
+		const user = new User({firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, password: hashedPassword, age : req.body.age, phoneNumber : req.body.phoneNumber, gender : req.body.gender, favorite : []});
 
 		try {
 			// Insert user into the database
@@ -79,6 +97,45 @@ exports.signUpUser = async (req, res) => {
 			res.render(createPath('sign_up'), {message:'server error'});
 		}
 	}
+};
+
+exports.addFav = async (req, res) => {
+  verifyToken(req, res);
+	if(!res.auth) res.render(createPath('error'));
+	try {
+    const car = await Car.findById(req.params.id);
+    if (!car) {
+      return res.status(404).json({ message: 'Car not found' });
+    }
+		await User.findByIdAndUpdate(
+			{ _id: req.userId},
+			{ $addToSet: { favorite: [req.params.id] } }
+		);
+		
+		
+		res.redirect(req.headers.referer);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteFav = async (req, res) => {
+  verifyToken(req, res);
+	if(!res.auth) res.render(createPath('error'));
+	try {
+    const car = await Car.findById(req.params.id);
+    if (!car) {
+      return res.status(404).json({ message: 'Car not found' });
+    }
+		await User.findByIdAndUpdate(
+			{ _id: req.userId},
+			{ $pull: { favorite: req.params.id } }
+		);
+		
+		res.redirect(req.headers.referer);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.logOutUser = async (req, res) => {

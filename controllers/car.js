@@ -2,10 +2,17 @@ const Car = require('../models/car');
 const User = require('../models/user');
 const config = require('../config');
 const upload = require("../middleware/multer");
+const formidable = require('formidable');
+const fs = require('fs');
 const path = require('path');
 const verifyToken = require('../middleware/authMiddleware');
 const axios = require('axios');
 const createPath = (page) => path.resolve(__dirname, '..', 'views', `${page}.ejs`);
+const uploadDir = path.join(__dirname,'..', 'public', 'uploads_img');
+// Создаем директорию, если она не существует
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
 function brandCountry(brand){
 	let country;
@@ -41,49 +48,10 @@ function brandCountry(brand){
 	return country;
 }
 
-// var storage = multer.diskStorage({
-// 	destination: function (req, file, cb) {
-// 			// Uploads is the Upload_folder_name
-// 			cb(null, "uploads");
-// 	},
-// 	filename: function (req, file, cb) {
-// 			cb(null, file.fieldname + "-" + Date.now() + ".jpg");
-// 	},
-// });
-
-// // Define the maximum size for uploading
-// // picture i.e. 1 MB. it is optional
-// const maxSize = 1 * 1000 * 1000;
-
-// var upload = multer({
-// 	storage: storage,
-// 	limits: { fileSize: maxSize },
-// 	fileFilter: function (req, file, cb) {
-// 			// Set the filetypes, it is optional
-// 			var filetypes = /jpeg|jpg|png/;
-// 			var mimetype = filetypes.test(file.mimetype);
-
-// 			var extname = filetypes.test(
-// 					path.extname(file.originalname).toLowerCase()
-// 			);
-
-// 			if (mimetype && extname) {
-// 					return cb(null, true);
-// 			}
-
-// 			cb(
-// 					"Error: File upload only supports the " +
-// 							"following filetypes - " +
-// 							filetypes
-// 			);
-// 	},
-
-// 	// mypic is the name of file attribute
-// }).array("img1","img2","img3");
-
 
 exports.getAll = async (req, res) => {
-  verifyToken(req, res);
+	console.log(uploadDir);
+	verifyToken(req, res);
 	if(!res.auth) res.render(createPath('error'));
 	const user = await User.findById(req.userId);
 	const cars = await Car.find();
@@ -96,12 +64,13 @@ exports.getOne = async (req, res) => {
 	try {
     const car = await Car.findById(req.params.id);
     if (!car) {
-      return res.status(404).json({ message: 'Car not found' });
+      return res.render(createPath('error'));
     }
 		const user = await User.findById(req.userId);
 		const country = brandCountry(car.brand);
 		let flag = null;
 		let logo = null;
+		let fav = false;
 
 		if(car.brand){
 			flag = `https://flagsapi.com/${country}/flat/64.png`;
@@ -115,7 +84,8 @@ exports.getOne = async (req, res) => {
 			});
 			logo = resp.data;
 		}
-		res.render(createPath('car'), {'auth': res.auth, 'admin': res.admin, 'car': car, 'user': user, 'flag': flag || false, 'logo': logo || false});
+		if(user.favorite.includes(car.id)) fav = true;
+		res.render(createPath('car'), {'auth': res.auth, 'admin': res.admin, 'car': car, 'user': user, 'flag': flag || false, 'logo': logo || false, 'fav': fav});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -124,17 +94,38 @@ exports.getOne = async (req, res) => {
 exports.create = async (req, res) => {
 	verifyToken(req, res);
 	if(!res.auth || !res.admin ) res.render(createPath('error'));
-	
-	const { name, description, brand, price, type, img1, img2, img3 } = req.body;
-	
-	try {
-		const newCar = new Car({ name, description, brand, price, type, img1, img2, img3});
-		await newCar.save();
 
-		res.redirect("/cars/"+newCar._id);
-	} catch (err) {
-		res.status(500).json({ message: err.message });
-	}
+	const form = new formidable.IncomingForm();
+	form.uploadDir = uploadDir;
+	form.keepExtensions = true;
+
+	form.parse(req, async (err, fields, files) => {
+		
+			const imgPaths = {};
+			const imageKeys = ['img1', 'img2', 'img3']; // Ожидаемые ключи для файлов
+
+			imageKeys.forEach((key) => {
+				const file = files[key];
+				if (file) {
+					const fileExt = file[0].originalFilename.match(/\.(jpg|jpeg|png)$/i); // Извлекаем расширение файла
+					const newFileName = `${file[0].newFilename}${fileExt[0]}`; // Создаем новое имя файла с расширением
+					const newfilePath = path.join(uploadDir, newFileName);
+					fs.rename(file[0].filepath, newfilePath, function(err) {
+						if ( err ) console.log('ERROR: ' + err);
+					});
+					
+					imgPaths[key] = path.join("uploads_img",path.basename(newfilePath));
+				} else {
+					imgPaths[key] = undefined; // Если файл не загружен, установите undefined
+				}
+			});
+			
+			const { name, description, brand, price, type, ownerName, phoneNumber} = fields;
+			const newCar = new Car({ name: name[0], description: description[0], brand: brand[0], price: price[0], type: type[0], ownerName: ownerName[0], phoneNumber: phoneNumber[0], img1: imgPaths['img1'],img2: imgPaths['img2'],img3: imgPaths['img3']});
+			await newCar.save();
+
+			res.redirect("/cars/"+newCar._id);
+	});
 };
 
 exports.createPage = async (req, res) => {
@@ -160,13 +151,13 @@ exports.update = async (req, res) => {
 	verifyToken(req, res);
 	if(!res.auth || !res.admin ) res.render(createPath('error'));
 	
-	const { name, description, brand, price, type, img1, img2, img3} = req.body;
+	const { name, description, brand, price, type, ownerName, phoneNumber} = req.body;
 	try {
-		const updatedCar = await Car.findByIdAndUpdate(req.params.id, { name, description, brand, price, type, img1, img2, img3 });
+		const updatedCar = await Car.findByIdAndUpdate(req.params.id, { name, description, brand, price, type, ownerName, phoneNumber});
 		if (!updatedCar) {
       return res.status(404).json({ message: 'Car not found' });
     }
-		res.redirect("/cars/"+updatedCar._id);
+		res.redirect("/cars/"+updatedCar._id)
 	} catch (err) {
 		res.status(500).json({ message: err.message });
 	}
@@ -181,36 +172,8 @@ exports.deleteById = async (req, res) => {
     if (!deletedCar) {
       return res.status(404).json({ message: 'Task not found' });
     }
-    res.redirect('/cars');
+    res.redirect(req.headers.referer);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
-
-exports.vin = async (req, res) => {
-	verifyToken(req, res);
-	if(!res.auth || !res.admin ) res.render(createPath('error'));
-	let vin;
-	if(!req.body.vin) {
-		vin=null;
-	} else {
-		const respV = await axios.get('https://api.api-ninjas.com/v1/vinlookup', {
-			params: {
-				vin: req.body.vin
-			},
-			headers: {
-				'X-Api-Key': config.api_ninja
-			}
-		});
-		vin = respV.data;
-	}
-	const user = await User.findById(req.userId);
-	res.render(createPath('vin'), {'auth': res.auth, 'admin': res.admin, 'user': user, 'vin': vin});
-};
-
-exports.vinPage = async (req, res) => {
-	verifyToken(req, res);
-	if(!res.auth || !res.admin ) res.render(createPath('error'));
-	const user = await User.findById(req.userId);
-	res.render(createPath('vin'), {'auth': res.auth, 'admin': res.admin, 'user': user, 'vin': null});
 };

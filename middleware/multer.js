@@ -3,7 +3,7 @@ const multer = require('multer');
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'D:/AITU/2_course/Back_End/Final/public');
+    cb(null, 'D:/AITU/2_course/Back_End/Final/public/cars_img/');
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);

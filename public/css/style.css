@@ -27,6 +27,7 @@
 main {
   background-color: var(--color1);
 	overflow: hidden;
+	min-height: 75vh;
 }
 .color1{
 	background: var(--color1);

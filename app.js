@@ -7,8 +7,8 @@ const verifyToken = require('./middleware/authMiddleware');
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser")
 const { indexPage, aboutPage, servicePage,  signInPage, signUpPage} = require('./controllers/page');
-const { signInUser, signUpUser, logOutUser } = require('./controllers/user');
-const { getAll, getOne, create, createPage, update, updatePage, deleteById, vinPage, vin } = require('./controllers/car');
+const { signInUser, signUpUser, logOutUser, addFav, deleteFav, profilePage } = require('./controllers/user');
+const { getAll, getOne, create, createPage, update, updatePage, deleteById } = require('./controllers/car');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -33,10 +33,6 @@ app.get('/service', servicePage)
 app.get('/sign_in', signInPage)
 app.get('/sign_up', signUpPage)
 
-//VIN
-app.get('/vin', vinPage)
-app.post('/vin', vin)
-
 //CRUD Car
 app.get('/cars', getAll)
 app.get('/cars/create', createPage)
@@ -44,7 +40,12 @@ app.get('/cars/:id', getOne)
 app.post('/cars', create)
 app.get('/cars/:id/update', updatePage)
 app.post('/cars/:id', update)
-app.get('/cars/:id/delete', deleteById);
+app.get('/cars/:id/delete', deleteById)
+
+//Profile
+app.get('/profile', profilePage)
+app.get('/fav/:id', addFav)
+app.get('/unfav/:id', deleteFav)
 
 //Sign in and sign up
 app.post('/sign_in', signInUser)
@@ -53,5 +54,5 @@ app.get('/log_out', logOutUser)
 
 //Error Page
 app.use((req, res) => {
-	res.status(404).render(createPath('error'));
+	res.status(404).render(createPath('error'))
 })

@@ -11,7 +11,6 @@
 				</a>
 				<%if(auth) {%>
 				<a class="navbar-brand d-none d-xl-inline me-5" href="/cars">Cars</a>
-				<a class="navbar-brand d-none d-xl-inline me-5" href="/vin">Vin</a>
 				<%}%>
 				<a class="navbar-brand d-none d-xl-inline me-5" href="/service">Service</a>
 				<a class="navbar-brand d-none d-xl-inline" href="/about_us">About us</a>
@@ -23,6 +22,7 @@
 						<%= user.email %>
 					</button>
 					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="/profile">Profile</a></li>
 						<li><a class="dropdown-item" href="/log_out">Log out</a></li>
 					</ul>
 				</div>
