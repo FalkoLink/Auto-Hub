@@ -1,6 +1,10 @@
 IT-2202 Sultan Kudaybergenov 
 
 Auto-Hub
+![picture1](assets/picture1.png)
+![picture2](assets/picture2.png)
+![picture3](assets/picture3.png)
+![picture4](assets/picture4.png)
 
 Web Technologies Back-End Final
 
